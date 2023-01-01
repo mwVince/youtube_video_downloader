@@ -11,7 +11,16 @@ def get_video():
         pct_completed = bytes_downloaded / total_size * 100
         print(f"Status: {round(pct_completed, 2)} %")
 
-    yt = YouTube(url, on_progress_callback=on_progress)
+    def on_complete(stream, output_path):
+        """On complete callback function"""
+        total_size = stream.filesize
+        size_mb = round(total_size / (1024 * 1024), 2)
+        print(f"Download Completed: {size_mb} mb")
+        print(f'Path: {output_path}')
+
+    yt = YouTube(url,
+                 on_progress_callback=on_progress,
+                 on_complete_callback=on_complete)
 
     print(f'Downloading: {yt.title}')
 
